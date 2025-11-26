@@ -1,5 +1,5 @@
 // --- PASSWORD PROTECTION ---
-const CORRECT_PASSWORD = 'Novalisa83'; // !! VIKTIGT: Ändra detta lösenord till något hemligt!
+const CORRECT_PASSWORDS = ['Novalisa83', 'AleVA']; // !! VIKTIGT: Ändra dessa lösenord till något hemligt!
 
 const passwordContainer = document.getElementById('password-container');
 const appContainer = document.getElementById('app-container');
@@ -8,7 +8,7 @@ const loginBtn = document.getElementById('login-btn');
 const errorMessage = document.getElementById('error-message');
 
 function checkPassword() {
-    if (passwordInput.value === CORRECT_PASSWORD) {
+    if (CORRECT_PASSWORDS.includes(passwordInput.value)) {
         passwordContainer.style.display = 'none';
         appContainer.style.display = 'flex';
         loadMapScript(); // Load the map only after login
