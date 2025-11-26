@@ -510,59 +510,55 @@ function calculateAndDisplayRoute() {
 
 
 
-    directionsService.route(request, (result, status) => {
+        directionsService.route(request, (result, status) => {
 
 
 
 
 
-        if (status === 'OK') {
 
 
 
 
 
-            directionsRenderer.setDirections(result);
 
+            if (status === 'OK') {
 
 
 
 
-            let totalDuration = 0;
 
 
 
 
 
-            let totalDistance = 0;
 
 
+                directionsRenderer.setDirections(result);
 
 
 
-            result.routes[0].legs.forEach(leg => {
 
 
 
 
 
-                totalDuration += leg.duration.value;
 
 
 
+                let totalDuration = 0;
 
 
-                totalDistance += leg.distance.value;
 
 
 
 
 
-            });
 
 
 
 
+                let totalDistance = 0;
 
 
 
@@ -570,43 +566,39 @@ function calculateAndDisplayRoute() {
 
 
 
-            // Format and display total duration
 
 
 
 
+                result.routes[0].legs.forEach(leg => {
 
-            const hours = Math.floor(totalDuration / 3600);
 
 
 
 
 
-            const minutes = Math.floor((totalDuration % 3600) / 60);
 
 
 
 
 
-            let durationText = "Total körtid: ";
+                    totalDuration += leg.duration.value; // Google's duration in seconds
 
 
 
 
 
-            if (hours > 0) durationText += `${hours} timmar `;
 
 
 
 
 
-            durationText += `${minutes} minuter`;
 
+                    totalDistance += leg.distance.value; // Google's distance in meters
 
 
 
 
-            totalDurationElement.textContent = durationText;
 
 
 
@@ -614,23 +606,22 @@ function calculateAndDisplayRoute() {
 
 
 
+                });
 
 
 
 
-            // Format and display total distance
 
 
 
 
 
-            const kilometers = (totalDistance / 1000).toFixed(1);
 
 
+    
 
 
 
-            totalDistanceElement.textContent = `Total sträcka: ${kilometers} km`;
 
 
 
@@ -639,31 +630,352 @@ function calculateAndDisplayRoute() {
 
 
 
+                let durationText;
 
 
 
-        } else {
 
 
 
 
 
-            window.alert('Directions request failed due to ' + status);
 
 
 
+                const kilometers = totalDistance / 1000;
 
 
-        }
 
 
 
 
 
-    });
 
 
 
 
+    
 
-}
+
+
+
+
+
+
+
+
+
+
+                if (selectedMode === 'AVOID_HIGHWAYS') {
+
+
+
+
+
+
+
+
+
+
+
+                    // Manual calculation for A-traktor
+
+
+
+
+
+
+
+
+
+
+
+                    const timeInHours = kilometers / 30; // Time = Distance / Speed
+
+
+
+
+
+
+
+
+
+
+
+                    const hours = Math.floor(timeInHours);
+
+
+
+
+
+
+
+
+
+
+
+                    const minutes = Math.round((timeInHours - hours) * 60);
+
+
+
+
+
+
+
+
+
+
+
+                    durationText = "Beräknad körtid (30km/h): ";
+
+
+
+
+
+
+
+
+
+
+
+                    if (hours > 0) durationText += `${hours} timmar `;
+
+
+
+
+
+
+
+
+
+
+
+                    durationText += `${minutes} minuter`;
+
+
+
+
+
+
+
+
+
+
+
+                } else {
+
+
+
+
+
+
+
+
+
+
+
+                    // Standard calculation for Car and Walking
+
+
+
+
+
+
+
+
+
+
+
+                    const hours = Math.floor(totalDuration / 3600);
+
+
+
+
+
+
+
+
+
+
+
+                    const minutes = Math.floor((totalDuration % 3600) / 60);
+
+
+
+
+
+
+
+
+
+
+
+                    durationText = "Total körtid: ";
+
+
+
+
+
+
+
+
+
+
+
+                    if (hours > 0) durationText += `${hours} timmar `;
+
+
+
+
+
+
+
+
+
+
+
+                    durationText += `${minutes} minuter`;
+
+
+
+
+
+
+
+
+
+
+
+                }
+
+
+
+
+
+
+
+
+
+
+
+                
+
+
+
+
+
+
+
+
+
+
+
+                totalDurationElement.textContent = durationText;
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+                // Format and display total distance
+
+
+
+
+
+
+
+
+
+
+
+                totalDistanceElement.textContent = `Total sträcka: ${kilometers.toFixed(1)} km`;
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+            } else {
+
+
+
+
+
+
+
+
+
+
+
+                window.alert('Directions request failed due to ' + status);
+
+
+
+
+
+
+
+
+
+
+
+            }
+
+
+
+
+
+
+
+
+
+
+
+        });
+
+
+
+
+
+
+
+
+
+
+
+    }
