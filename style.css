@@ -140,8 +140,14 @@ h1 {
     cursor: not-allowed;
 }
 
-#total-duration {
+#total-duration, #total-distance {
     margin-top: 20px;
     font-size: 1.2em;
     font-weight: bold;
+}
+
+#total-distance {
+    margin-top: 10px; /* A bit less margin than the one above */
+    font-size: 1.1em;
+    font-weight: normal;
 }
