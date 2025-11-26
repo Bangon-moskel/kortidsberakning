@@ -99,6 +99,21 @@ h1 {
     cursor: pointer;
 }
 
+#travel-mode-container {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-around;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px;
+}
+
+#travel-mode-container label {
+    cursor: pointer;
+    padding: 5px;
+}
+
 #stops-list {
     list-style: upper-alpha;
     padding-left: 20px;

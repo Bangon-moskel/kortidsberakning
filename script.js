@@ -393,7 +393,16 @@ function clearRoute() {
 function calculateAndDisplayRoute() {
 
 
+
+
+
     if (stops.length < 2) return;
+
+
+
+
+
+
 
 
 
@@ -402,10 +411,19 @@ function calculateAndDisplayRoute() {
     const waypoints = stops.slice(1, stops.length - 1).map(stop => ({
 
 
+
+
+
         location: stop.location,
 
 
+
+
+
         stopover: true,
+
+
+
 
 
     }));
@@ -414,19 +432,70 @@ function calculateAndDisplayRoute() {
 
 
 
+
+
+
+
+
+
+    // Get selected travel mode
+
+
+
+
+
+    const selectedMode = document.querySelector('input[name="travel-mode"]:checked').value;
+
+
+
+
+
+    
+
+
+
+
+
     const request = {
+
+
+
 
 
         origin: stops[0].location,
 
 
+
+
+
         destination: stops[stops.length - 1].location,
+
+
+
 
 
         waypoints: waypoints,
 
 
-        travelMode: 'DRIVING',
+
+
+
+        // Set travel mode and options based on selection
+
+
+
+
+
+        travelMode: selectedMode === 'WALKING' ? 'WALKING' : 'DRIVING',
+
+
+
+
+
+        avoidHighways: selectedMode === 'AVOID_HIGHWAYS',
+
+
+
 
 
     };
@@ -435,28 +504,58 @@ function calculateAndDisplayRoute() {
 
 
 
+
+
+
+
+
+
     directionsService.route(request, (result, status) => {
+
+
+
 
 
         if (status === 'OK') {
 
 
+
+
+
             directionsRenderer.setDirections(result);
+
+
+
 
 
             let totalDuration = 0;
 
 
+
+
+
             let totalDistance = 0;
+
+
+
 
 
             result.routes[0].legs.forEach(leg => {
 
 
+
+
+
                 totalDuration += leg.duration.value;
 
 
+
+
+
                 totalDistance += leg.distance.value;
+
+
+
 
 
             });
@@ -465,22 +564,46 @@ function calculateAndDisplayRoute() {
 
 
 
+
+
+
+
+
+
             // Format and display total duration
+
+
+
 
 
             const hours = Math.floor(totalDuration / 3600);
 
 
+
+
+
             const minutes = Math.floor((totalDuration % 3600) / 60);
+
+
+
 
 
             let durationText = "Total körtid: ";
 
 
+
+
+
             if (hours > 0) durationText += `${hours} timmar `;
 
 
+
+
+
             durationText += `${minutes} minuter`;
+
+
+
 
 
             totalDurationElement.textContent = durationText;
@@ -489,10 +612,22 @@ function calculateAndDisplayRoute() {
 
 
 
+
+
+
+
+
+
             // Format and display total distance
 
 
+
+
+
             const kilometers = (totalDistance / 1000).toFixed(1);
+
+
+
 
 
             totalDistanceElement.textContent = `Total sträcka: ${kilometers} km`;
@@ -501,16 +636,34 @@ function calculateAndDisplayRoute() {
 
 
 
+
+
+
+
+
+
         } else {
+
+
+
 
 
             window.alert('Directions request failed due to ' + status);
 
 
+
+
+
         }
 
 
+
+
+
     });
+
+
+
 
 
 }
