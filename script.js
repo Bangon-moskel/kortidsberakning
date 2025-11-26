@@ -1,9 +1,6 @@
-// --- CONFIGURATION ---
-// !! VIKTIGT: Ändra detta lösenord till något hemligt!
-const CORRECT_PASSWORD = 'Novalisa83';
-
-
 // --- PASSWORD PROTECTION ---
+const CORRECT_PASSWORD = 'Novalisa83'; // !! VIKTIGT: Ändra detta lösenord till något hemligt!
+
 const passwordContainer = document.getElementById('password-container');
 const appContainer = document.getElementById('app-container');
 const passwordInput = document.getElementById('password-input');
@@ -22,8 +19,9 @@ function checkPassword() {
 }
 
 function loadMapScript() {
-    if (GOOGLE_MAPS_API_KEY === 'DIN_API_NYCKEL_HÄR' || !GOOGLE_MAPS_API_KEY) {
-        alert('Fel: Google Maps API-nyckel är inte ifylld i script.js.');
+    // This checks if the API key was successfully injected by the hosting platform (e.g., Netlify)
+    if (typeof GOOGLE_MAPS_API_KEY === 'undefined' || !GOOGLE_MAPS_API_KEY) {
+        alert('Fel: Kunde inte ladda Google Maps API-nyckel. Kontrollera konfigurationen på Netlify.');
         return;
     }
     const script = document.createElement('script');
