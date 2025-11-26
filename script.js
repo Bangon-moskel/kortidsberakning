@@ -19,13 +19,16 @@ function checkPassword() {
 }
 
 function loadMapScript() {
-    // This checks if the API key was successfully injected by the hosting platform (e.g., Netlify)
-    if (typeof GOOGLE_MAPS_API_KEY === 'undefined' || !GOOGLE_MAPS_API_KEY) {
-        alert('Fel: Kunde inte ladda Google Maps API-nyckel. Kontrollera konfigurationen på Netlify.');
+    const apiKeyMeta = document.querySelector("meta[name='google-maps-api-key']");
+    const apiKey = apiKeyMeta ? apiKeyMeta.content : null;
+
+    // This checks if the API key was successfully read from the meta tag
+    if (!apiKey || apiKey.startsWith('${')) {
+        alert('Fel: Kunde inte ladda Google Maps API-nyckel från meta-taggen. Kontrollera konfigurationen på Netlify.');
         return;
     }
     const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&callback=initMap`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap`;
     script.async = true;
     script.defer = true;
     document.head.appendChild(script);
