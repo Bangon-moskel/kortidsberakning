@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Körtidsberäkning</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="password-container">
+        <h2>Ange lösenord</h2>
+        <input type="password" id="password-input" placeholder="Lösenord...">
+        <button id="login-btn">Logga in</button>
+        <p id="error-message" style="color:red;"></p>
+    </div>
+
+    <div id="app-container" style="display: none;">
+        <div id="controls">
+            <h1>Körtidsberäkning</h1>
+            <div id="address-form">
+                <input type="text" id="address-input" placeholder="Skriv in en adress...">
+                <button id="add-address-btn">Lägg till</button>
+            </div>
+            <p>Eller klicka direkt på kartan.</p>
+            <ol id="stops-list"></ol>
+            <button id="calculate-btn" disabled>Avsluta rutt & Beräkna tid</button>
+            <div id="total-duration"></div>
+        </div>
+        <div id="map"></div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
