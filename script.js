@@ -64,7 +64,7 @@ let stops = [];
 let markers = [];
 
 // DOM elements (these are only used after initMap is called)
-let stopsListElement, calculateBtn, totalDurationElement, addressInputEl, addAddressBtn;
+let stopsListElement, calculateBtn, clearBtn, totalDurationElement, addressInputEl, addAddressBtn;
 
 /**
  * Initializes the map and services. This function is called by the dynamically loaded Google Maps API script.
@@ -73,6 +73,7 @@ function initMap() {
     // Get DOM elements now that the app is visible
     stopsListElement = document.getElementById('stops-list');
     calculateBtn = document.getElementById('calculate-btn');
+    clearBtn = document.getElementById('clear-btn');
     totalDurationElement = document.getElementById('total-duration');
     addressInputEl = document.getElementById('address-input');
     addAddressBtn = document.getElementById('add-address-btn');
@@ -103,6 +104,7 @@ function initMap() {
     });
 
     calculateBtn.addEventListener('click', calculateAndDisplayRoute);
+    clearBtn.addEventListener('click', clearRoute);
     addAddressBtn.addEventListener('click', geocodeAddress);
     addressInputEl.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') geocodeAddress();
@@ -134,9 +136,32 @@ function addStop(latLng, addressString) {
     listItem.textContent = addressString;
     stopsListElement.appendChild(listItem);
 
+    clearBtn.disabled = false;
     if (stops.length >= 2) {
         calculateBtn.disabled = false;
     }
+}
+
+function clearRoute() {
+    // Clear markers from the map
+    for (let i = 0; i < markers.length; i++) {
+        markers[i].setMap(null);
+    }
+    markers = [];
+    
+    // Clear stops array
+    stops = [];
+
+    // Clear the route from the map
+    directionsRenderer.setDirections({routes: []});
+
+    // Clear UI elements
+    stopsListElement.innerHTML = '';
+    totalDurationElement.textContent = '';
+
+    // Disable buttons
+    calculateBtn.disabled = true;
+    clearBtn.disabled = true;
 }
 
 function calculateAndDisplayRoute() {
