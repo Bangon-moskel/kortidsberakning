@@ -18,20 +18,31 @@ function checkPassword() {
     }
 }
 
-function loadMapScript() {
-    const apiKeyMeta = document.querySelector("meta[name='google-maps-api-key']");
-    const apiKey = apiKeyMeta ? apiKeyMeta.content : null;
+async function loadMapScript() {
+    try {
+        // Fetch the API key from our secure serverless function
+        const response = await fetch('/.netlify/functions/get-api-key');
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        const apiKey = data.apiKey;
 
-    // This checks if the API key was successfully read from the meta tag
-    if (!apiKey || apiKey.startsWith('${')) {
-        alert('Fel: Kunde inte ladda Google Maps API-nyckel från meta-taggen. Kontrollera konfigurationen på Netlify.');
-        return;
+        if (!apiKey) {
+            alert('Fel: Mottog ingen API-nyckel från servern.');
+            return;
+        }
+
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap`;
+        script.async = true;
+        script.defer = true;
+        document.head.appendChild(script);
+
+    } catch (error) {
+        console.error('Error fetching API key:', error);
+        alert('Ett allvarligt fel uppstod vid hämtning av API-nyckel. Kontrollera webbläsarens konsol.');
     }
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap`;
-    script.async = true;
-    script.defer = true;
-    document.head.appendChild(script);
 }
 
 loginBtn.addEventListener('click', checkPassword);
